@@ -1,6 +1,6 @@
 package models;
 
-public class Admistrador extends Usuario{
+public class Administrador extends Usuario{
     public void cadastrarUnidade(){
 
     }
