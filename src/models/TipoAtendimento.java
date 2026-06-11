@@ -1,11 +1,12 @@
 package models;
 
 public class TipoAtendimento {
-    
     private String descricao;
 
     public void criar(){
-
+        if(descricao == null) {
+            return;
+        }
     }
     public void ler(){
 
@@ -14,6 +15,6 @@ public class TipoAtendimento {
 
     }
     public void listarTiposPorUnidade(){
-
+        
     }
 }
