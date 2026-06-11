@@ -2,12 +2,15 @@ package views;
 
 import java.util.Scanner;
 import controllers.FilaController;
+import dao.DadosRepository;
 
 public class SistemaView {
     private Scanner leitor = new Scanner(System.in);
     private FilaController controller = new FilaController();
+    private DadosRepository repository = new DadosRepository();
 
     public void exibirMenuPrincipal(){
+       repository.conectarBanco();
        int opcao = -1;
 
        while(opcao != 0){
@@ -55,7 +58,6 @@ public class SistemaView {
         try {
             int acao = Integer.parseInt(leitor.nextLine());
             if (acao == 1) {
-                controller.processarEntradaFila();
                 entrarNaFilaView();
             } else if(acao == 2) {
                 visualizarHistoricoView();
@@ -81,13 +83,12 @@ public class SistemaView {
             switch(acao){
                 case 1:
                     controller.processarChamadaSenha();
-                    System.out.println("Chamando proximo paciente...");
                     break;
                 case 2:
-                    System.out.println("Iniciando atendimento...");
+                    System.out.println("Status alterado: Iniciando atendimento...");
                     break;
                 case 3:
-                    System.out.println("Finalizando atendimento...");
+                    System.out.println("Status alterado: Finalizando atendimento...");
                     break;
                 case 4:
                    return;
@@ -113,10 +114,14 @@ public class SistemaView {
 
             switch(acao) {
                 case 1:
-                    System.out.println("Cadastrando unidade...");
+                    System.out.print("Nome da Unidade: ");
+                    String nome = leitor.nextLine();
+                    System.out.print("Endereco: ");
+                    String endereco = leitor.nextLine();
+                    System.out.println("Unidade " + nome  + " no endereco " + endereco +  " cadastrada com sucesso.");
                     break;
                 case 2:
-                    System.out.println("Gerenciando tipos...");
+                    System.out.println("Lista de servicos carregada.");
                     break;
                 case 3:
                     exibirRelatorios();
@@ -133,14 +138,26 @@ public class SistemaView {
     }
 
     public void entrarNaFilaView(){
-        System.out.println("Aguardando geracao de senha...");
+        System.out.println("\n=== Solicitacao de Senha ===");
+        System.out.print("Informe seu CPF: ");
+        String cpf = leitor.nextLine();
+        
+        controller.processarEntradaFila();
+        System.out.println("Senha vinculada ao CPF: " + cpf);
     }
 
     public void visualizarHistoricoView(){
-        System.out.println("Carregando historico de atendimentos...");
+        System.out.println("\n=== Consulta de Historico ===");
+        System.out.print("Informe o CPF para busca: ");
+        String cpf = leitor.nextLine();
+        
+        System.out.println("Consultando registros no banco de dados para o CPF: " + cpf);
+        repository.buscarDados();
     }
 
     public void exibirRelatorios() {
-        System.out.println("Gerando relatorios...");
+        System.out.println("\n=== Relatorio Geral de Atendimentos ===");
+        repository.buscarDados();
+        System.out.println("Relatório carregado com sucesso.");
     }
 }
