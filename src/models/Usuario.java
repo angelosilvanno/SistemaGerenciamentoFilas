@@ -20,6 +20,12 @@ public abstract class Usuario {
     }
 
     public void recuperarSenha(){
+        if(cpf == null) {
+            return;
+        }
+        if(ativo == false) {
+            return;
+        }
     }
 
     public void desativarConta(){

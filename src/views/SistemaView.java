@@ -11,10 +11,54 @@ public class SistemaView {
 
     public void exibirMenuPrincipal(){
        repository.conectarBanco();
+
+       String tipoUsuario = null;
+
+       while (tipoUsuario == null) {
+           System.out.println("=================================");
+           System.out.println("       SISTEMA DE FILAS");
+           System.out.println("=================================");
+           System.out.println("1 - Fazer Login");
+           System.out.println("2 - Esqueci minha senha");
+           System.out.println("0 - Sair");
+           System.out.print("\nEscolha uma opção: ");
+
+           String opLogin = leitor.nextLine();
+
+           if (opLogin.equals("1")) {
+               System.out.print("CPF: ");
+               String cpf = leitor.nextLine();
+               System.out.print("Senha: ");
+               String senha = leitor.nextLine();
+
+               tipoUsuario = repository.verificarLoginETipo(cpf, senha);
+
+               if (tipoUsuario == null) {
+                   System.out.println("\nUsuário ou senha inválidos. Tente novamente.");
+               }
+           } else if (opLogin.equals("2")) {
+               System.out.println("\n--- RECUPERAÇÃO DE ACESSO ---");
+               System.out.print("Informe seu CPF: ");
+               String cpfRecuperacao = leitor.nextLine();
+               
+               String senha = repository.buscarSenhaPorCpf(cpfRecuperacao);
+                if (senha != null) {
+                  System.out.println("Sua senha é: " + senha + "\n");
+                } else {
+                  System.out.println("CPF não encontrado.\n");
+              }
+           } else if (opLogin.equals("0")) {
+               System.out.println("Encerrando o sistema...");
+               System.exit(0);
+           }
+       }
+
+       System.out.println("Bem-vindo! Perfil: " + tipoUsuario);
+
        int opcao = -1;
 
        while(opcao != 0){
-           System.out.println("\n--- SISTEMA DE GERENCIAMENTO DE FILAS ---");
+           System.out.println("\n--- SEJA BEM VINDO(A) ---");
            System.out.println("1. Cidadao");
            System.out.println("2. Atendente");
            System.out.println("3. Administrador");
@@ -33,10 +77,18 @@ public class SistemaView {
                     exibirMenuCidadao();
                     break;
                 case 2:
-                    exibirPainelAtendente();
+                    if (tipoUsuario.equalsIgnoreCase("Atendente") || tipoUsuario.equalsIgnoreCase("Administrador")) {
+                        exibirPainelAtendente();
+                    } else {
+                        System.out.println("Acesso negado: Perfil insuficiente.");
+                    }
                     break;
                 case 3:
-                    exibirPainelAdmin();
+                    if (tipoUsuario.equalsIgnoreCase("Administrador")) {
+                        exibirPainelAdmin();
+                    } else {
+                        System.out.println("Acesso negado: Perfil insuficiente.");
+                    }
                     break;
                 case 0: 
                     System.out.println("Encerrando o sistema...");
