@@ -1,8 +1,11 @@
 package views;
+
 import java.util.Scanner;
+import controllers.FilaController;
 
 public class SistemaView {
     private Scanner leitor = new Scanner(System.in);
+    private FilaController controller = new FilaController();
 
     public void exibirMenuPrincipal(){
        int opcao = -1;
@@ -24,20 +27,20 @@ public class SistemaView {
 
             switch(opcao){
                 case 1:
-                 exibirMenuCidadao();
-                break;
+                    exibirMenuCidadao();
+                    break;
                 case 2:
-                 exibirPainelAtendente();
-                break;
+                    exibirPainelAtendente();
+                    break;
                 case 3:
-                 exibirPainelAdmin();
-                break;
+                    exibirPainelAdmin();
+                    break;
                 case 0: 
-                 System.out.println("Encerrando o sistema...");
-                break;
+                    System.out.println("Encerrando o sistema...");
+                    break;
                 default:
-                 System.out.println("Opcao invalida.");
-                break;
+                    System.out.println("Opcao invalida.");
+                    break;
            }
        }
     }
@@ -52,6 +55,7 @@ public class SistemaView {
         try {
             int acao = Integer.parseInt(leitor.nextLine());
             if (acao == 1) {
+                controller.processarEntradaFila();
                 entrarNaFilaView();
             } else if(acao == 2) {
                 visualizarHistoricoView();
@@ -59,7 +63,7 @@ public class SistemaView {
                 return;
             }
         } catch (NumberFormatException e){
-            System.out.println("Erro: Escolha invalida. Digite 1, 2 ou 3.");
+            System.out.println("Erro: Escolha invalida.");
         }
     }
 
@@ -76,6 +80,7 @@ public class SistemaView {
 
             switch(acao){
                 case 1:
+                    controller.processarChamadaSenha();
                     System.out.println("Chamando proximo paciente...");
                     break;
                 case 2:

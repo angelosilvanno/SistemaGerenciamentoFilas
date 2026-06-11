@@ -1,32 +1,55 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import models.*;
 
 public class DadosRepository {
     private Connection conexao;
 
-    public void conectarBanco(){
+    public void conectarBanco() {
         try {
             Class.forName("org.sqlite.JDBC");
-            String url = "jdbc:sqlite:banco_filas.db";
-            this.conexao = DriverManager.getConnection(url);
+            this.conexao = DriverManager.getConnection("jdbc:sqlite:banco_filas.db");
             criarTabelasIniciais();
-        } catch(ClassNotFoundException | SQLException e){
+        } catch (Exception e) {
+            System.err.println("Erro ao conectar: " + e.getMessage());
+        }
+    }
+
+    private void criarTabelasIniciais() {
+        try (Statement stmt = this.conexao.createStatement()) {
+            stmt.execute("CREATE TABLE IF NOT EXISTS usuarios (cpf TEXT PRIMARY KEY, nome TEXT, senha TEXT, ativo INTEGER);");
+            stmt.execute("CREATE TABLE IF NOT EXISTS senhas (numero INTEGER PRIMARY KEY AUTOINCREMENT, status TEXT, posicao INTEGER);");
+        } catch (SQLException e) {
             System.err.println(e.getMessage());
         }
     }
 
-    private void criarTabelasIniciais(){
-        try (Statement stmt = this.conexao.createStatement()) {
-            stmt.execute("CREATE TABLE IF NOT EXISTS usuarios (cpf TEXT PRIMARY KEY, nome TEXT, senha TEXT, tipo TEXT, telefone TEXT, ativo INTEGER);");
-            stmt.execute("CREATE TABLE IF NOT EXISTS unidades (nome TEXT PRIMARY KEY, endereco TEXT, horario TEXT);");
-            stmt.execute("CREATE TABLE IF NOT EXISTS tipos_atendimento (descricao TEXT PRIMARY KEY);");
-            stmt.execute("CREATE TABLE IF NOT EXISTS senhas (numero INTEGER PRIMARY KEY AUTOINCREMENT, hora_emissao TEXT, status TEXT, posicao INTEGER, cpf_cidadao TEXT, nome_unidade TEXT);");
+    public boolean verificarLogin(String cpf, String senha) {
+        String sql = "SELECT * FROM usuarios WHERE cpf = ? AND senha = ? AND ativo = 1";
+        try (PreparedStatement pstmt = conexao.prepareStatement(sql)) {
+            pstmt.setString(1, cpf);
+            pstmt.setString(2, senha);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next();
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            return false;
         }
+    }
+
+    public void salvarDados(Usuario u) {
+        if (u == null) {
+            return;
+        }
+    }
+
+    public void buscarDados() {
+        if (conexao == null) {
+            return;
+        }
+    }
+
+    public Connection getConexao() {
+        return conexao;
     }
 }
