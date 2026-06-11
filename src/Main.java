@@ -11,13 +11,13 @@ public class Main {
             Statement stmt = repositorio.getConexao().createStatement();
             
             stmt.execute("INSERT OR IGNORE INTO usuarios (cpf, nome, senha, tipo, ativo) " +
-            "VALUES ('11111111111', 'Ana Gestora', 'admin123', 'Administrador', 1);");
+            "VALUES ('11111', 'Ana Gestora', 'admin123', 'Administrador', 1);");
 
             stmt.execute("INSERT OR IGNORE INTO usuarios (cpf, nome, senha, tipo, ativo) " +
-            "VALUES ('22222222222', 'Dr. Henrique', 'atend123', 'Atendente', 1);");
+            "VALUES ('22222', 'Dr. Henrique', 'atend123', 'Atendente', 1);");
 
             stmt.execute("INSERT OR IGNORE INTO usuarios (cpf, nome, senha, tipo, ativo) " +
-            "VALUES ('33333333333', 'Ângelo Silvano', 'cidadao123', 'Cidadao', 1);");
+            "VALUES ('333333', 'Ângelo Silvano', 'cidadao123', 'Cidadao', 1);");
 
         } catch (Exception e) {
     
